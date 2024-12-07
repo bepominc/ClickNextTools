@@ -12,8 +12,8 @@
     <Grid>
         <GroupBox x:Name="stepOneBox" Header="Step One: Select Driver" Margin="5,0,0,0" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="SelectDriverButton" Content="Browse Files" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FFDDDDDD" Height="20" Margin="5"/>
-                <TextBox x:Name="DriverPathBox" TextWrapping="NoWrap" VerticalAlignment="Top" Width="420" Height="20" Margin="5"/>
+                <Button x:Name="SelectDriverButton" Content="Browse Files" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FFDDDDDD" Height="20" Margin="5"  Click="SelectDriverButton_Click"/>
+                <TextBox x:Name="DriverPathBox" ToolTipService.ShowOnDisabled="True" TextWrapping="NoWrap" VerticalAlignment="Top" Width="420" Height="20" Margin="5" IsEnabled="False"/>
             </StackPanel>
         </GroupBox>
 
@@ -36,7 +36,13 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox x:Name="PrintSidingComboBox" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="175" SelectionChanged="PrintSidingComboBox_SelectionChanged"/>
+                    <ComboBox x:Name="DuplexingComboBox" SelectedValuePath="Tag" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="175" SelectionChanged="DuplexingComboBox_SelectionChanged">
+                        <ComboBox.Items>
+                            <ComboBoxItem IsSelected="True"  Tag="OneSided">One Sided</ComboBoxItem>
+                            <ComboBoxItem Tag="TwoSidedLongEdge">Two Sided (Long Edge)</ComboBoxItem>
+                            <ComboBoxItem Tag="TwoSidedShortEdge">Two Sided (Short Edge)</ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
                     <TextBlock x:Name="duplexingModeText" Margin="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="93" Height="18" Text="Duplexing Mode"/>
                 </StackPanel>
 
