@@ -68,7 +68,7 @@ namespace ClickNextPrint
                 return;
             }
 
-            // TODO: Validate a printer name and address have been provided
+            // Validate a printer name and address have been provided
             if (PrinterNameBox.Text == null || PrinterNameBox.Text.Length == 0)
             {
                 MessageBox.Show("Please provide a printer name first", "No printer name", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -103,7 +103,8 @@ namespace ClickNextPrint
                         ColorCheckBox.IsChecked ?? false,
                         CollateCheckBox.IsChecked ?? false
                     );
-                    // TODO: Kick off printer bundle compilation.
+                    
+                    bundle.Build(Path.GetDirectoryName(dialog.FileName));
                 }
                 catch (Exception ex)
                 {

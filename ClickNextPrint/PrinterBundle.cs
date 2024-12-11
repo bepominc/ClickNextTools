@@ -27,5 +27,12 @@ namespace ClickNextPrint
             this.Color = color;
             this.Collate = collate;
         }
+
+        public void Build(string destinationFolder)
+        {
+            // TODO: Copy embedded template into a temp folder.
+            // TODO: Replace placeholder values in copied template.
+            // TODO: Start IntuneWinAppUtil.exe with temp folder as source and destination folder as out.
+        }
     }
 }
