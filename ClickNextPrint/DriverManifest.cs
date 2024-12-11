@@ -45,9 +45,6 @@ namespace ClickNextPrint
                 // Add keys containing driver names to the drivers list.
                 // Sometimes the keys may be mis-identified as anonymous (null), in which case the string we want is in the first value.
                 drivers.AddRange(platformDrivers.Keys.Select(key => key.Id ?? key.KeyValues[0].Value));
-
-                // Only add the first matching platform.
-                break;
             }
 
             if (drivers.Count < 1)

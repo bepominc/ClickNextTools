@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -62,7 +63,8 @@ namespace ClickNextPrint
         private void DuplexingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 #if DEBUG
-            Debug.WriteLine(DuplexingComboBox.SelectedValue);
+            Debug.WriteLine((string)DuplexingComboBox.SelectedValue);
+            Debug.WriteLine((string)PrinterListBox.SelectedItem);
 #endif
         }
 
@@ -70,17 +72,29 @@ namespace ClickNextPrint
         {
             // Verify a valid driver has been selected.
             string driverRoot = Path.GetDirectoryName(DriverPathBox.Text) ?? "";
-            if (SelectedDriverManifest == null || driverRoot == "")
+            if (SelectedDriverManifest == null || driverRoot == "" || PrinterListBox.SelectedItem == null)
             {
                 MessageBox.Show("Please select a valid driver first", "No driver selected", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             // TODO: Validate a printer name and address have been provided
+            if (PrinterNameBox.Text == null || PrinterNameBox.Text.Length == 0)
+            {
+                MessageBox.Show("Please provide a printer name first", "No printer name", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            Regex ipv4Regex = new Regex(@"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$");
+            if (!ipv4Regex.IsMatch(PrinterAddressBox.Text))
+            {
+                MessageBox.Show("Please provide a valid printer IPv4 address", "No printer address", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             // Show the system save file dialog, limited to .intunewin files.
             FileDialog dialog = new SaveFileDialog();
-            dialog.FileName = PrinterNameBox.Text;
+            dialog.FileName = PrinterNameBox.Text.Replace(" ", "");
             dialog.DefaultExt = ".intunewin";
             dialog.Filter = "Intune win32 app (*.intunewin)|*.intunewin";
 
@@ -88,7 +102,24 @@ namespace ClickNextPrint
 
             if (result == true)
             {
-                // TODO: Kick off printer bundle compilation.
+                try
+                {
+                    PrinterBundle bundle = new PrinterBundle(
+                        Path.GetFileNameWithoutExtension(dialog.FileName).Replace(" ", ""),
+                        (string)PrinterListBox.SelectedItem,
+                        PrinterNameBox.Text,
+                        PrinterAddressBox.Text,
+                        (string)DuplexingComboBox.SelectedValue,
+                        ColorCheckBox.IsChecked ?? false,
+                        CollateCheckBox.IsChecked ?? false
+                    );
+                    // TODO: Kick off printer bundle compilation.
+                }
+                catch (Exception ex)
+                {
+                    // Some kind of error while building the scripts and intune bundle. Pop-up a dialog box with the error message.
+                    MessageBox.Show(ex.Message, "Error building output", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
     }
