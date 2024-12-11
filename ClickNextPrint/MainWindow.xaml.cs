@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -16,8 +17,6 @@ namespace ClickNextPrint
         {
             InitializeComponent();
         }
-
-        private DriverManifest? SelectedDriverManifest;
 
         private void SelectDriverButton_Click(object sender, RoutedEventArgs e)
         {
@@ -41,11 +40,11 @@ namespace ClickNextPrint
                     string manifestText = File.ReadAllText(DriverPathBox.Text);
 
                     // Create a new driver manifest object from the manifest text.
-                    this.SelectedDriverManifest = new DriverManifest(manifestText);
+                    DriverManifest driverManifest = new DriverManifest(manifestText);
 
                     // No errors so far, we are okay to update the printer list box.
                     PrinterListBox.Items.Clear();
-                    foreach (string driver in this.SelectedDriverManifest.GetDriverList())
+                    foreach (string driver in driverManifest.GetDriverList())
                     {
                         PrinterListBox.Items.Add(driver);
                     }
@@ -60,19 +59,10 @@ namespace ClickNextPrint
             }
         }
 
-        private void DuplexingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-#if DEBUG
-            Debug.WriteLine((string)DuplexingComboBox.SelectedValue);
-            Debug.WriteLine((string)PrinterListBox.SelectedItem);
-#endif
-        }
-
         private void BuildIntuneButton_Click(object sender, RoutedEventArgs e)
         {
             // Verify a valid driver has been selected.
-            string driverRoot = Path.GetDirectoryName(DriverPathBox.Text) ?? "";
-            if (SelectedDriverManifest == null || driverRoot == "" || PrinterListBox.SelectedItem == null)
+            if (DriverPathBox.Text == "" || Path.GetDirectoryName(DriverPathBox.Text) == null || PrinterListBox.SelectedItem == null)
             {
                 MessageBox.Show("Please select a valid driver first", "No driver selected", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;

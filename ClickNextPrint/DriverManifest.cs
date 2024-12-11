@@ -1,6 +1,8 @@
 ﻿using InfHelper;
 using InfHelper.Models;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ClickNextPrint
 {
@@ -31,7 +33,7 @@ namespace ClickNextPrint
 
             // Array of platforms in preferred order.
             // TODO: Option to only show 32bit drivers.
-            string[] driverPlatforms = [manufacturerString + ".NTamd64", manufacturerString + ".NTamd64.6.0", manufacturerString];
+            string[] driverPlatforms = { manufacturerString + ".NTamd64", manufacturerString + ".NTamd64.6.0", manufacturerString };
 
             // Iterate over driver platforms and build a list of drivers from the keys in each platform section.
             List<string> drivers = new List<string>();
@@ -45,6 +47,9 @@ namespace ClickNextPrint
                 // Add keys containing driver names to the drivers list.
                 // Sometimes the keys may be mis-identified as anonymous (null), in which case the string we want is in the first value.
                 drivers.AddRange(platformDrivers.Keys.Select(key => key.Id ?? key.KeyValues[0].Value));
+
+                // Only add the first matching platform.
+                break;
             }
 
             if (drivers.Count < 1)

@@ -36,7 +36,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox x:Name="DuplexingComboBox" SelectedValuePath="Tag" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="175" SelectionChanged="DuplexingComboBox_SelectionChanged">
+                    <ComboBox x:Name="DuplexingComboBox" SelectedValuePath="Tag" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" Width="175">
                         <ComboBox.Items>
                             <ComboBoxItem IsSelected="True"  Tag="OneSided">One Sided</ComboBoxItem>
                             <ComboBoxItem Tag="TwoSidedLongEdge">Two Sided (Long Edge)</ComboBoxItem>
