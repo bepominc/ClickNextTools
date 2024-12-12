@@ -95,13 +95,15 @@ namespace ClickNextPrint
                 try
                 {
                     PrinterBundle bundle = new PrinterBundle(
-                        Path.GetFileNameWithoutExtension(dialog.FileName).Replace(" ", ""),
+                        Path.GetFileName(DriverPathBox.Text),
                         (string)PrinterListBox.SelectedItem,
                         PrinterNameBox.Text,
                         PrinterAddressBox.Text,
                         (string)DuplexingComboBox.SelectedValue,
                         ColorCheckBox.IsChecked ?? false,
-                        CollateCheckBox.IsChecked ?? false
+                        CollateCheckBox.IsChecked ?? false,
+                        Path.GetDirectoryName(DriverPathBox.Text),
+                        Path.GetFileNameWithoutExtension(dialog.FileName).Replace(" ", "")
                     );
                     
                     bundle.Build(Path.GetDirectoryName(dialog.FileName));
