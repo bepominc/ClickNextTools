@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,6 +57,13 @@ namespace ClickNextPrint
 
         public void Build(string destinationFolder)
         {
+            // Verify the intune util app is available.
+            string intuneUtilPath = Path.Combine(AppContext.BaseDirectory, "IntuneWinAppUtil.exe");
+            if (!Path.Exists(intuneUtilPath))
+            {
+                throw new Exception("Missing IntuneWinAppUtil.exe - Download it from https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool and place it in the same folder as this application");
+            }
+
             // Replace placeholder values in embedded templates.
             string installScript = Properties.Resources.InstallPrinterDriver
                 .Replace("{{VAR_INFFILENAME}}", this.InfFileName)
@@ -77,7 +86,14 @@ namespace ClickNextPrint
             Directory.CreateDirectory(Path.Combine(buildDirectory, "Drivers"));
             this.copyDrivers(this.DriverPath, Path.Combine(buildDirectory, "Drivers"));
 
-            // TODO: Start IntuneWinAppUtil.exe with temp folder as source and destination folder as out.
+            // Start IntuneWinAppUtil.exe with temp folder as source and destination folder as out.
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(intuneUtilPath)
+            {
+                Arguments = @"-c " + buildDirectory + @" -s " + Path.Combine(buildDirectory, this.SaveFileName + ".ps1") + @" -o " + destinationFolder + @" -q",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            Process.Start(processStartInfo);
         }
     }
 }
