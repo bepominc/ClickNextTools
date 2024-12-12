@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClickNextPrint
 {
@@ -91,7 +86,7 @@ namespace ClickNextPrint
             {
                 Arguments = @"-c " + buildDirectory + @" -s " + Path.Combine(buildDirectory, this.SaveFileName + ".ps1") + @" -o " + destinationFolder + @" -q",
                 UseShellExecute = false,
-                CreateNoWindow = true,
+                CreateNoWindow = false,
             };
             Process.Start(processStartInfo);
         }
