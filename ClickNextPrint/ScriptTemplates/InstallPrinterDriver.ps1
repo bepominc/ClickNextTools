@@ -3,9 +3,6 @@ $infFileName = "{{VAR_INFFILENAME}}"
 $driverName = "{{VAR_DRIVERNAME}}"
 $printerDisplayName = "{{VAR_PRINTERNAME}}"
 $printerAddress = "{{VAR_PRINTERADDRESS}}"
-$duplexingMode = {{VAR_DUPLEXINGMODE}}
-$isColor = {{VAR_COLOR}}
-$isCollate = {{VAR_COLLATE}}
 
 # --- Script start. You shouldn't need to change anything below this line during configuration. ---
 
@@ -104,10 +101,10 @@ try {
     Write-ClickNextLog "Printer $printerDisplayName added successfully"
 
     Write-ClickNextLog "Setting configuration options"
-    Set-PrintConfiguration -PrinterName $printerDisplayName -DuplexingMode $duplexingMode
-    Set-PrintConfiguration -PrinterName $printerDisplayName -Color $isColor
-    Set-PrintConfiguration -PrinterName $printerDisplayName -Collate $isCollate
-    Write-ClickNextLog "The following configurations were made: DuplexingMode = $duplexingMode | Color = $isColor | Collate = $isCollate"
+    Set-PrintConfiguration -PrinterName $printerDisplayName -DuplexingMode {{VAR_DUPLEXINGMODE}}
+    Set-PrintConfiguration -PrinterName $printerDisplayName -Color {{VAR_COLOR}}
+    Set-PrintConfiguration -PrinterName $printerDisplayName -Collate {{VAR_COLLATE}}
+    Write-ClickNextLog "The following configurations were made: DuplexingMode = {{VAR_DUPLEXINGMODE}} | Color = {{VAR_COLOR}} | Collate = {{VAR_COLLATE}}"
 }
 catch {
     $err = $_
